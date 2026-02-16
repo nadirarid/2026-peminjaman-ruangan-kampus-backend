@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="PeminjamanRuangan.Api/PeminjamanRuangan.Api.csproj" />
+  <Project Path="PeminjamanRuangan.Core/PeminjamanRuangan.Core.csproj" />
+  <Project Path="PeminjamanRuangan.Infrastructure/PeminjamanRuangan.Infrastructure.csproj" />
+</Solution>
