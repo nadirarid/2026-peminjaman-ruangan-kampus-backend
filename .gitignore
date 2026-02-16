@@ -1,0 +1,12 @@
+# .gitignore
+bin/
+obj/
+appsettings.Production.json
+appsettings.Development.json
+*.user
+*.secrets
+*.db
+*.db-shm
+*.db-wal
+.env
+.DS_Store
