@@ -1,0 +1,19 @@
+## .NET Core
+bin/
+obj/
+*.user
+*.secrets
+appsettings.Development.json
+
+## Visual Studio
+.vs/
+.vscode/
+
+## Database
+*.mdf
+*.ldf
+
+## Migration snapshot (jangan commit file ini)
+**/Migrations/*.Designer.cs
+**/Migrations/*.cs
+!**/Migrations/Program.cs
