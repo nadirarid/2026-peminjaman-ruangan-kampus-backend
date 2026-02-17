@@ -22,7 +22,8 @@ namespace PeminjamanRuangan.Api.Controllers
         public async Task<ActionResult<IEnumerable<FormDtoPeminjaman>>> GetSemuaRuangan(
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10,
-            [FromQuery] string? search = null)
+            [FromQuery] string? search = null,
+            [FromQuery] int? minKapasitas = null)  // TAMBAHKAN INI
         {
             var query = _context.Ruangan.AsQueryable();
             
@@ -31,6 +32,11 @@ namespace PeminjamanRuangan.Api.Controllers
                 query = query.Where(r => 
                     r.IdRuangan.Contains(search) || 
                     r.NamaRuangan.Contains(search));
+            }
+            
+            if (minKapasitas.HasValue)
+            {
+                query = query.Where(r => r.Kapasitas >= minKapasitas.Value);
             }
             
             var totalItems = await query.CountAsync();
@@ -118,6 +124,11 @@ namespace PeminjamanRuangan.Api.Controllers
             
             var ruanganExist = await _context.Ruangan
                 .AnyAsync(r => r.IdRuangan == buatDto.IdRuangan);
+
+            if (buatDto.Kapasitas < 5)
+            {
+                return BadRequest(new { message = "Kapasitas ruangan minimal 5 orang" });
+            }
             
             if (ruanganExist)
             {
