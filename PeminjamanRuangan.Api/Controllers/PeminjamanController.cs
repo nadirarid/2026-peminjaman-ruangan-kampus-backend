@@ -87,6 +87,44 @@ namespace PeminjamanRuangan.Api.Controllers
             
             return Ok(peminjaman);
         }
+
+        // GET: api/peminjaman/cek-ketersediaan
+        [HttpGet("cek-ketersediaan")]
+        public async Task<IActionResult> CekKetersediaan(
+            [FromQuery] int idRuangan,
+            [FromQuery] DateTime startTime,
+            [FromQuery] DateTime endTime)
+        {
+            var ruangan = await _context.Ruangan.FindAsync(idRuangan);
+            if (ruangan == null)
+            {
+                return NotFound(new { message = "Ruangan tidak ditemukan" });
+            }
+            
+            if (ruangan.Status != "Tersedia")
+            {
+                return Ok(new { 
+                    tersedia = false, 
+                    alasan = $"Ruangan sedang {ruangan.Status.ToLower()}" 
+                });
+            }
+            
+            var bentrok = await _context.Peminjaman
+                .AnyAsync(p => p.IdRuangan == idRuangan &&
+                            p.Status == "Disetujui" &&
+                            p.StartTime < endTime &&
+                            p.EndTime > startTime);
+            
+            if (bentrok)
+            {
+                return Ok(new { 
+                    tersedia = false, 
+                    alasan = "Maaf, ruangan sudah terjadwal" 
+                });
+            }
+            
+            return Ok(new { tersedia = true, alasan = "Ruangan tersedia" });
+        }
         
         // POST: api/peminjaman
         [HttpPost]
@@ -95,6 +133,13 @@ namespace PeminjamanRuangan.Api.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            var durasi = peminjaman.EndTime - peminjaman.StartTime;
+  
+            if (durasi.TotalHours > 8)
+            {
+                return BadRequest(new { message = "Durasi peminjaman maksimal 8 jam" });
             }
             
             var ruangan = await _context.Ruangan.FindAsync(peminjaman.IdRuangan);

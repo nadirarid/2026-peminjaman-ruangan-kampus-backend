@@ -23,7 +23,7 @@ namespace PeminjamanRuangan.Api.Controllers
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10,
             [FromQuery] string? search = null,
-            [FromQuery] int? minKapasitas = null)  // TAMBAHKAN INI
+            [FromQuery] int? minKapasitas = null)
         {
             var query = _context.Ruangan.AsQueryable();
             
