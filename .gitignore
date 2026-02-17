@@ -1,19 +1,12 @@
-## .NET Core
+# .gitignore
 bin/
 obj/
+appsettings.Production.json
+appsettings.Development.json
 *.user
 *.secrets
-appsettings.Development.json
-
-## Visual Studio
-.vs/
-.vscode/
-
-## Database
-*.mdf
-*.ldf
-
-## Migration snapshot (jangan commit file ini)
-**/Migrations/*.Designer.cs
-**/Migrations/*.cs
-!**/Migrations/Program.cs
+*.db
+*.db-shm
+*.db-wal
+.env
+.DS_Store
